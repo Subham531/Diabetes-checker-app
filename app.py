@@ -4,6 +4,7 @@ import joblib
 
 app = Flask(__name__)
 
+
 model = joblib.load('model.pkl')
 scaler = joblib.load('scaler.pkl')
 @app.route('/')
@@ -15,7 +16,7 @@ def home():
 
 def predict():
     try:
-        # Validate JSON
+        # JSON validation
         if not request.is_json:
             return jsonify({'error': 'Expected application/json request'}), 400
 
@@ -26,7 +27,7 @@ def predict():
         raw_features = payload['data']
         input_array = np.array(raw_features).reshape(1, -1)
 
-        # Check expected feature count if available
+        # Expected feature count if available
         expected = None
         if hasattr(scaler, 'n_features_in_'):
             expected = int(scaler.n_features_in_)
